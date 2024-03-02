@@ -1,0 +1,91 @@
+
+GET https://bnp2l7ll-8000.asse.devtunnels.ms/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5N2U4YmQ3OC1mNzliLTQ4N2ItYWExNS1jY2UzNzE5OGQ2NTUiLCJuYW1lIjoiRGFmZmEyIiwiZW1haWwiOiJkYWZmYTJAZ21haWwuY29tIiwicm9sZSI6Ikthc2lyIiwiaWF0IjoxNzA4Njk5ODQwLCJleHAiOjE3MDg2OTk4NjB9.8AnrTMGZ8rrkFrA9WUKiWlAKc_WX5xIe1Lfwck-yWV8
+
+
+
+###
+POST https://bnp2l7ll-8000.asse.devtunnels.ms/login
+Content-Type: application/json
+
+{
+    "email": "daffa2@gmail.com",
+    "password": "1234"
+}
+
+###
+POST https://bnp2l7ll-8000.asse.devtunnels.ms/register
+Content-Type: application/json
+
+{
+    "id": "",
+    "name": "admin",
+    "email": "admin@gmail.com",
+    "password": "1234",
+    "confPassword": "1234",
+    "role": "Admin",
+    "refresh_token": ""
+}
+
+###
+GET https://bnp2l7ll-8000.asse.devtunnels.ms/token
+
+###
+DELETE http://localhost:5000/logout
+
+###
+GET https://bnp2l7ll-8000.asse.devtunnels.ms/products
+
+###
+DELETE  https://bnp2l7ll-8000.asse.devtunnels.ms/transactions/TRX-3Ojk-LMlW0Fk5
+
+###
+GET  https://bnp2l7ll-8000.asse.devtunnels.ms/transactions
+
+###
+GET  https://bnp2l7ll-8000.asse.devtunnels.ms/transactions/TRX-ar2U-Ua6vNVxD
+
+###
+DELETE  https://bnp2l7ll-8000.asse.devtunnels.ms/products/80322a53-6a20-4d06-a3f7-093a1c9b3219
+
+###
+POST https://bnp2l7ll-8000.asse.devtunnels.ms/discounts
+Content-Type: application/json
+
+{
+    "id": "",
+    "nama_discount": "New Year Sale",
+    "potongan_harga": 20,
+    "tgl_start": "2024-01-01",
+    "tgl_end": "2024-01-31"
+}
+
+###
+DELETE https://bnp2l7ll-8000.asse.devtunnels.ms/discounts/37597d6d-0073-4290-b403-02f918f9c14a
+
+###
+POST https://bnp2l7ll-8000.asse.devtunnels.ms/detaildiscount
+Content-Type: application/json
+
+{
+    "idDiscount": "85a322c6-acb5-4bcc-97df-475def7d818a",
+    "idProduct": "473d485b-7e1c-4018-b70b-0df780496f2b"
+}
+
+###
+
+{
+    "products": [
+        {
+            "id": "1af1b6bf-c137-40ed-b31f-cabf9b128dfc",
+            "quantity": 2
+        },
+        {
+            "id": "473d485b-7e1c-4018-b70b-0df780496f2b",
+            "quantity": 2
+        }
+    ],
+    "customer_name": "John Doe2",
+    "customer_email": "john.doe2@example.com",
+    "id_meja": "aa9a432a-37c1-4545-959c-8a874057d30a"
+}

@@ -1,5 +1,5 @@
 import express from "express";
-import { createTransaction, deleteTransaction, getTransactionById, getTransactions, trxNotif, updateStatusPemesanan, updateTransactionStatus } from "../features/transactions/index.js";
+import { createTransaction, deleteTransaction, getTransactionById, getTransactionNotif, getTransactionNotifById, getTransactions, trxNotif, updateStatusPemesanan, updateTransactionStatus } from "../features/transactions/index.js";
 import { validateTransaction, validateTransactionStatus } from "../features/transactions/transactions.validation.js";
 import { createProduct, deleteProduct, getProducts, getProductsById, getProductsByIdd, updateProduct, updateProductDiscount, updateProductStock } from "../features/products/index.js";
 import { catchAsync } from "../utils/catch-async.js";
@@ -23,6 +23,8 @@ router.get('/', (req, res) => {
 // transactions
 router.post('/transactions', validateTransaction, catchAsync(createTransaction));
 router.get('/transactions', catchAsync(getTransactions));
+router.get('/transactions/notif', catchAsync(getTransactionNotif));
+router.get('/transactions/notif/:id', catchAsync(getTransactionNotifById));
 router.get('/transactions/:transaction_id', catchAsync(getTransactionById));
 router.put('/transactions/:transaction_id', validateTransactionStatus, catchAsync(updateTransactionStatus));
 router.post('/transactions/notification', catchAsync(trxNotif))

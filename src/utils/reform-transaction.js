@@ -1,7 +1,11 @@
 export const reformTransaction = (transaction) => {
+    const transactionNotif = transaction.transactionNotif;
+    const gross_amount = transactionNotif ? transactionNotif.gross_amount : null;
+    const transaction_time = transactionNotif ? transactionNotif.transaction_time : null;
+
     return {
         id: transaction.id,
-        total: transaction.total,
+        total: gross_amount,
         status: transaction.status,
         customer_name: transaction.customer_name,
         customer_email: transaction.customer_email,
@@ -11,7 +15,7 @@ export const reformTransaction = (transaction) => {
         id_meja: transaction.meja.id,
         no_meja: transaction.meja.no_meja,
         status_pemesanan: transaction.status_pemesanan,
-        created_at: transaction.created_at,
+        created_at: transaction_time,
         products: transaction.transactions_items.map((transactionItem) => ({
             id: transactionItem.product_id,
             name: transactionItem.product_name,

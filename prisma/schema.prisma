@@ -80,7 +80,6 @@ model TransactionsItem {
   id             String      @id @db.VarChar(110)
   transaction_id String      @db.VarChar(110)
   product_id     String      @db.VarChar(110)
-  product_name   String      @db.VarChar(255)
   price          Int
   potongan_harga Int?
   quantity       Int
@@ -125,6 +124,8 @@ model DiscountDetail {
   potongan_harga Int
 
   @@map("discount_detail")
+  @@unique([id_product]) // Add unique constraint on product_id
+
 }
 
 

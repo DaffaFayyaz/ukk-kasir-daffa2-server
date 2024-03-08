@@ -28,7 +28,6 @@ class DiscountDetailService {
     
 
     async updateDiscountDetail(id, { discount_id }) {
-        // Fetch the discount to get potongan_harga
         const discount = await prisma.discount.findUnique({
             where: { id: discount_id },
             select: { potongan_harga: true }

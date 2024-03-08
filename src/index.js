@@ -19,10 +19,10 @@ app.use(express.static("public"));
 
 app.use(errorHandler);
 
-// cron.schedule('* * * * *', async () => { 
-//     console.log('Running cron job to update discount status...');
-//     await discountService.updateDiscountStatus();
-// });
+cron.schedule('* * * * *', async () => { 
+    console.log('Running cron job to update discount status...');
+    await discountService.updateDiscountStatus();
+});
 
 const currentServerTime = new Date();
 console.log(currentServerTime);

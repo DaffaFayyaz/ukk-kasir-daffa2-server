@@ -18,7 +18,7 @@ export const reformTransaction = (transaction) => {
         created_at: transaction_time,
         products: transaction.transactions_items.map((transactionItem) => ({
             id: transactionItem.product_id,
-            name: transactionItem.product_name,
+            name: transactionItem.products.name,
             price: transactionItem.price,
             quantity: transactionItem.quantity,
             image: transactionItem.products.image,

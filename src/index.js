@@ -12,6 +12,7 @@ const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
 app.use(cors({ credentials:true, origin:'http://localhost:5173' }));
+// app.use(cors({ credentials:true, origin:'https://bnp2l7ll-5173.asse.devtunnels.ms' }));
 app.use(cookieParser());
 app.use(fileUpload());
 app.use(routes);

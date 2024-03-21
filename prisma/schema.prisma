@@ -32,9 +32,32 @@ model Meja {
   transactions Transaction[]
 }
 
+model TransactionNotif {
+  id                              String         @id @db.VarChar(110)
+  id_transaction_midtrans         String?        @db.VarChar(110)
+  payment_method                  String?        @db.VarChar(110)
+  transaction_time                DateTime?
+  order_id                        String?        @unique @db.VarChar(110)
+  expiry_time                     DateTime?
+  fraud_status                    String?
+  status_code                     String?
+  gross_amount                    String?
+  transaction_status              String?
+  transaction_type                String?
+  status_message                  String?
+  signature_key                   String?
+  reference_id                    String?
+  merchant_id                     String?
+  issuer                          String?
+  currency                        String?
+  acquirer                        String?
+  transaction                     Transaction?   @relation(fields: [order_id], references: [id])
+
+  @@index([order_id], map: "order_id")
+}
+
 model Transaction {
   id                 String              @id @db.VarChar(110)
-  total              Int
   status             transactions_status
   status_pemesanan   status_pemesanan    @default(Menunggu)
   customer_name      String              @db.VarChar(255)
@@ -47,15 +70,16 @@ model Transaction {
   created_at         DateTime?           @default(now()) @db.Timestamp(0)
   updated_at         DateTime?           @default(now()) @db.Timestamp(0)
   transactions_items TransactionsItem[]
+  transactionNotif   TransactionNotif?
 
   @@map("transactions")
 }
+
 
 model TransactionsItem {
   id             String      @id @db.VarChar(110)
   transaction_id String      @db.VarChar(110)
   product_id     String      @db.VarChar(110)
-  product_name   String      @db.VarChar(255)
   price          Int
   potongan_harga Int?
   quantity       Int
@@ -96,10 +120,12 @@ model DiscountDetail {
   id_product String  @db.VarChar(110)
   product Product @relation(fields: [id_product], references: [id])
   id_discount String @db.VarChar(110)
-  discount Discount @relation(fields: [id_discount], references: [id])
+  discount Discount @relation(fields: [id_discount], references: [id], onDelete: Cascade)
   potongan_harga Int
 
   @@map("discount_detail")
+  @@unique([id_product])
+
 }
 
 

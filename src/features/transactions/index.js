@@ -114,7 +114,6 @@ export const createTransaction = async (req, res) => {
     await Promise.all([
         transactionService.createTransaction({
             transaction_id,
-            gross_amount,
             customer_name,
             customer_email,
             status_pemesanan,
@@ -151,6 +150,31 @@ export const getTransactions = async (req, res) => {
         data: transactions.map((transaction) => reformTransaction(transaction))
     })
 };
+
+export const getTransactionNotif = async (req, res) => {
+    const transactionsNotif = await transactionService.getTransactionNotif();
+    res.json({
+        status: 'success',
+        data: transactionsNotif
+    })
+};
+
+export const getTransactionNotifById = async (req, res) => {
+    const { id } = req.params;
+    const transaction = await transactionService.getTransactionNotifById({ id });
+    if (!transaction) {
+        return res.status(404).json({
+            status: 'error',
+            message: 'Transaction not found'
+        });
+    }
+
+    res.status(200).json({
+        status: 'success',
+        data: transaction
+    });
+}
+
 
 export const getTransactionById = async (req, res) => {
     const { transaction_id } = req.params;
@@ -221,6 +245,26 @@ const updateStatusBasedOnMidtransResponse = async (transaction_id, data) => {
     } else if (transactionStatus == 'settlement'){
         const transaction = await transactionService.updateTransactionStatus({transaction_id, status: PAID, payment_method: data.payment_type});
         responseData = transaction;
+        const transactionNotifData = {
+            id_transaction_midtrans: data.transaction_id,
+            payment_method: data.payment_type,
+            transaction_time: new Date(data.transaction_time),
+            order_id: transaction_id,
+            fraud_status: data.fraud_status,
+            status_code: data.status_code,
+            gross_amount: data.gross_amount,
+            transaction_status: data.transaction_status,
+            transaction_type: data.transaction_type,
+            status_message: data.status_message,
+            signature_key: data.signature_key,
+            reference_id: data.reference_id,
+            merchant_id: data.merchant_id,
+            issuer: data.issuer,
+            currency: data.currency,
+            acquirer: data.acquirer,
+            expiry_time: new Date(data.expiry_time)
+        };
+        await transactionService.createTransactionNotif(transactionNotifData);
     } else if (transactionStatus == 'cancel' || transactionStatus == 'expire'){
         const transaction = await transactionService.updateTransactionStatus({transaction_id, status: CANCELED});
         responseData = transaction;

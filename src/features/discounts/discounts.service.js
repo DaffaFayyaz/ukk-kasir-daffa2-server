@@ -44,22 +44,31 @@ class DiscountService {
     }
 
     async updateDiscountStatus() {
-        const currentDate = new Date();
-        const discountsToDelete = await prisma.discount.findMany({
-            where: {
-                tgl_end: { lt: currentDate }
-            }
-        });
-
-        console.log('Discounts to Delete:', discountsToDelete);
-    
-        await Promise.all(discountsToDelete.map(async (discount) => {
-            await prisma.discount.delete({
-                where: { id: discount.id }
+        try {
+            const currentDate = new Date();
+            const discountsToDelete = await prisma.discount.findMany({
+                where: {
+                    tgl_end: { lt: currentDate }
+                }
             });
-            console.log(`Discount ${discount.id} deleted because tgl_end has passed.`);
-        }));
+    
+            console.log('Discounts to Delete:', discountsToDelete);
+        
+            await Promise.all(discountsToDelete.map(async (discount) => {
+                try {
+                    await prisma.discount.delete({
+                        where: { id: discount.id }
+                    });
+                    console.log(`Discount ${discount.id} deleted because tgl_end has passed.`);
+                } catch (error) {
+                    console.error(`Error deleting discount ${discount.id}:`, error);
+                }
+            }));
+        } catch (error) {
+            console.error('Error fetching discounts to delete:', error);
+        }
     }
+    
     
 }
 

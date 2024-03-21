@@ -6,11 +6,10 @@ import { PENDING_PAYMENT } from "../../utils/constant.js";
 const prisma = new PrismaClient();
 
 class TransactionService {
-    async createTransaction({transaction_id, gross_amount, customer_name, customer_email, status_pemesanan, snap_token = null, snap_redirect_url = null, id_meja = null}) {
+    async createTransaction({transaction_id, customer_name, customer_email, status_pemesanan, snap_token = null, snap_redirect_url = null, id_meja = null}) {
         return prisma.transaction.create({
             data: {
                 id: transaction_id,
-                total: gross_amount,
                 status: PENDING_PAYMENT,
                 customer_name,
                 customer_email,
@@ -35,7 +34,6 @@ class TransactionService {
                     id: `TRX-ITEM-${nanoid(10)}`,
                     transaction_id,
                     product_id: product.id,
-                    product_name: product.name,
                     price: product.price,
                     quantity: product.quantity,
                     potongan_harga: potongan_harga
@@ -44,11 +42,45 @@ class TransactionService {
         });
     }
     
-    
-    
-    
-    
+    async createTransactionNotif ({ id_transaction_midtrans, payment_method, transaction_time, order_id, expiry_time, fraud_status, status_code, gross_amount, transaction_status, transaction_type, status_message, signature_key, reference_id, merchant_id, issuer, currency, acquirer,  }) {
+        return prisma.transactionNotif.create({
+            data: {
+                id: `TRX-NOTIF-${nanoid(10)}`,
+                id_transaction_midtrans,
+                payment_method,
+                transaction_time,
+                order_id,
+                fraud_status,
+                status_code,
+                gross_amount,
+                transaction_status,
+                transaction_type,
+                status_message, 
+                signature_key,
+                reference_id,
+                merchant_id,
+                issuer,
+                currency,
+                acquirer,
+                expiry_time
+            }
+        })
+    }
 
+    async getTransactionNotifById({ id }) {
+        return prisma.transactionNotif.findUnique({
+            where: {
+                id: id
+            }
+        });
+    }    
+
+    async getTransactionNotif() {
+        return prisma.transactionNotif.findMany({
+
+        })
+    }
+    
     // get all transactions
     async getTransactions({ status }) {
         let where = {};
@@ -61,6 +93,7 @@ class TransactionService {
         return prisma.transaction.findMany({
             where,
             include: {
+                transactionNotif: true,
                 transactions_items: {
                     include: {
                         products: {
@@ -91,6 +124,7 @@ class TransactionService {
                 id: transaction_id
             },
             include: {
+                transactionNotif: true,
                 transactions_items: {
                     include: {
                         products: {

@@ -4,26 +4,30 @@ import {v4 as uuidv4} from 'uuid';
 const prisma = new PrismaClient();
 
 class DiscountDetailService {
-    async createDiscountDetail({id_product, id_discount}) {
-        const id = uuidv4();
+    async createDiscountDetail({ id_product, id_discount }) {
         const discount = await prisma.discount.findUnique({
-            where: {id: id_discount},
-            select: {potongan_harga: true}
+            where: { id: id_discount },
+            select: { potongan_harga: true }
         });
         const potongan_harga = discount ? discount.potongan_harga : null;
-
-        return prisma.discountDetail.create({
-            data: {
-                id,
-                product: {connect: {id: id_product}},
-                discount: {connect: {id: id_discount}},
-                potongan_harga
-            }
+    
+        const discountDetails = id_product.map(productId => {
+            const id = uuidv4();
+            return prisma.discountDetail.create({
+                data: {
+                    id,
+                    product: { connect: { id: productId } },
+                    discount: { connect: { id: id_discount } },
+                    potongan_harga
+                }
+            });
         });
+    
+        return Promise.all(discountDetails);
     }
+    
 
     async updateDiscountDetail(id, { discount_id }) {
-        // Fetch the discount to get potongan_harga
         const discount = await prisma.discount.findUnique({
             where: { id: discount_id },
             select: { potongan_harga: true }
@@ -39,7 +43,8 @@ class DiscountDetailService {
     async getDiscountDetails() {
         return prisma.discountDetail.findMany({
             include: {
-                discount: true
+                discount: true,
+                product: true
             }
         });
     }
@@ -49,6 +54,9 @@ class DiscountDetailService {
             where: { id },
             include: {
                 discount: true
+            },
+            include: {
+                product: true
             }
         });
     }
